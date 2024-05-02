@@ -1,0 +1,547 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles2.css">
+  </head>
+  <body style="border: 1px solid white;" >
+    <div
+      id="Game-Grid"
+      style="display: flex; flex-direction: column; position: relative"
+    >
+      <div
+        id="Super-Imposing-Grid"
+        style="
+          display: flex;
+          flex-direction: column;
+          margin-top: 63px;
+          margin-right: 18px;
+          margin-bottom: 45px;
+          margin-left: 18px;
+          position: absolute;
+          background-color: red;
+          opacity: 0.2;
+          
+        "
+      ></div>
+    </div>
+    <script>
+      let playableTiles = [];
+      let pathArray = [];
+      let initialDirection = "";
+      //functions accepts two params current position and target position
+
+      const GameGrid = document.getElementById("Game-Grid");
+      const SuperImposingGrid = document.getElementById("Super-Imposing-Grid")
+      GameGrid.style.display = "flex";
+      GameGrid.style.backgroundColor = "black";
+      
+      for (let i = 1; i <= 36; i++) {
+        let newColumn = document.createElement("div");
+        newColumn.id = `${i}`;
+        newColumn.style.display = "flex";
+        newColumn.style.flexDirection = "row";
+        GameGrid.appendChild(newColumn);
+        for (let j = 1; j <= 28; j++) {
+          let block = document.createElement("div");
+          block.id = `${(i - 1) * 28 + j}`;
+          block.style.display = "flex";
+          block.style.flexDirection = "column";
+          block.style.justifyContent = "center";
+          block.style.alignItems = "center";
+          block.style.width = "18px";
+          block.style.height = "18px";
+          block.style.border = "solid 1px white";
+          
+          
+
+          
+
+          if (
+            (i === 5 && j >= 2 && j <= 13) ||
+            (i === 5 && j >= 16 && j <= 27)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 7 && i <= 30 && i >= 6) ||
+            (j === 22 && i <= 30 && i >= 6)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 2 && i <= 12 && i >= 6) ||
+            (j === 27 && i <= 12 && i >= 6) ||
+            (j === 13 && i <= 9 && i >= 6) ||
+            (j === 16 && i <= 9 && i >= 6)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 10 && i <= 12 && i >= 10) ||
+            (j === 19 && i <= 12 && i >= 10)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (i === 9 && j >= 3 && j <= 6) ||
+            (i === 9 && j >= 8 && j <= 12) ||
+            (i === 9 && j >= 17 && j <= 21) ||
+            (i === 9 && j >= 23 && j <= 26)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (i === 9 && j <= 15 && j >= 14) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (i === 12 && j >= 3 && j <= 6) ||
+            (i === 12 && j >= 11 && j <= 13) ||
+            (i === 12 && j >= 16 && j <= 18) ||
+            (i === 12 && j >= 23 && j <= 26)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (i === 18 && j <= 10 && j >= 1 && j != 7 && j != 10) ||
+            (i === 18 && j <= 28 && j >= 19 && j != 22 && j != 19)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 13 && i <= 14 && i >= 13) ||
+            (j === 16 && i <= 14 && i >= 13)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            block.appendChild(dot);
+          }
+
+          if (i === 15 && j <= 19 && j >= 10) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 10 && i <= 23 && i >= 16) ||
+            (j === 19 && i <= 23 && i >= 16)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            block.appendChild(dot);
+          }
+
+          if (i === 21 && j <= 18 && j >= 11) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            block.appendChild(dot);
+          }
+
+          if (
+            (i === 24 && j <= 6 && j >= 2) ||
+            (i === 24 && j <= 13 && j >= 8) ||
+            (i === 24 && j <= 21 && j >= 16) ||
+            (i === 24 && j <= 27 && j >= 23)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 2 && i <= 26 && i >= 25) ||
+            (j === 13 && i <= 26 && i >= 25) ||
+            (j === 16 && i <= 26 && i >= 25) ||
+            (j === 27 && i <= 26 && i >= 25)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (i === 27 && j <= 4 && j >= 2) ||
+            (i === 27 && j <= 13 && j >= 8) ||
+            (i === 27 && j <= 21 && j >= 16) ||
+            (i === 27 && j <= 27 && j >= 25)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (i === 27 && j <= 15 && j >= 14) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 4 && i <= 29 && i >= 28) ||
+            (j === 10 && i <= 29 && i >= 28) ||
+            (j === 19 && i <= 29 && i >= 28) ||
+            (j === 25 && i <= 29 && i >= 28)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (i === 30 && j <= 6 && j >= 2) ||
+            (i === 30 && j <= 13 && j >= 10) ||
+            (i === 30 && j <= 19 && j >= 16) ||
+            (i === 30 && j <= 27 && j >= 23)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (
+            (j === 2 && i <= 32 && i >= 31) ||
+            (j === 13 && i <= 32 && i >= 31) ||
+            (j === 16 && i <= 32 && i >= 31) ||
+            (j === 27 && i <= 32 && i >= 31)
+          ) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          if (i === 33 && j <= 27 && j >= 2) {
+            playableTiles.push((i - 1) * 28 + j);
+            let dot = document.createElement("div");
+            block.style.backgroundColor = "gray";
+            dot.style.width = "6px";
+            dot.style.height = "6px";
+            dot.innerText = `${(i - 1) * 28 + j}`;
+            dot.style.fontWeight = "bold";
+            dot.style.fontSize = "4px";
+            dot.style.backgroundColor = "white";
+            block.appendChild(dot);
+          }
+
+          newColumn.appendChild(block);
+        }
+      }
+
+      /*for (let i = 1; i <= 15; i++) {
+        let newColumn = document.createElement("div");
+        newColumn.id = `${i}`;
+        newColumn.style.display = "flex";
+        newColumn.style.flexDirection = "row";
+        SuperImposingGrid.appendChild(newColumn);
+        for (let j = 1; j <= 13; j++) {
+          let block = document.createElement("div");
+          block.id = `${(i - 1) * 28 + j}`;
+          block.style.display = "flex";
+          block.style.flexDirection = "column";
+          block.style.justifyContent = "center";
+          block.style.alignItems = "center";
+          block.style.width = "36px";
+          block.style.height = "36px";
+         
+
+          
+
+          
+          newColumn.appendChild(block);
+        }
+      }*/
+
+
+      let oppoDirections = {
+        East: "West",
+        West: "East",
+        North: "North",
+        South: "South",
+      };
+
+      const findPath = (
+        initialPostion, //the first position of the monster
+        currentPositionMonster, // the variable thats going to keep getting updated and added to the copies of initialArray
+        pacmanPosition,
+        currentDirection,
+        initialArray,
+        arrayOfPaths //final array of all possible Paths
+      ) => {
+        let allDirections = {
+          East: playableTiles.includes(currentPositionMonster + 1),
+          South: playableTiles.includes(currentPositionMonster + 28),
+          West: playableTiles.includes(currentPositionMonster - 1),
+          North: playableTiles.includes(currentPositionMonster - 28),
+        };
+
+        let movableDirections = [];
+
+        //need a function that returns all the fiedls that is true
+
+        let count = 0;
+        Object.keys(allDirections).forEach((key) => {
+          if (
+            allDirections[key] === true &&
+            key !== oppoDirections[currentDirection]
+          ) {
+            movableDirections[count] = key;
+            count++;
+          }
+        });
+
+        for (const i of movableDirections) {
+          switch (i) {
+            case i == "East":
+              nextPosition = currentPositionMonster + 1;
+              currentDirection = "East";
+              let newArr1 = initialArray;
+              newArr1.push(nextPosition);
+              if (currentPositionMonster === initialPostion) {
+                break;
+              } else if (
+                currentPositionMonster + 35 === pacmanPosition ||
+                currentPositionMonster - 35 === pacmanPosition ||
+                currentPositionMonster + 1 === pacmanPosition ||
+                currentPositionMonster - 1 === pacmanPosition
+              ) {
+                arrayOfPaths.push(newArr1);
+              } else {
+                findPath(
+                  initialPostion,
+                  currentPositionMonster + 1,
+                  pacmanPosition,
+                  currentDirection,
+                  newArr1,
+                  arrayOfPaths
+                );
+              }
+              break;
+            case i === "South":
+              nextPosition = currentPositionMonster + 35;
+              currentDirection = "South";
+              let newArr3 = initialArray;
+              newArr3.push(nextPosition);
+              if (currentPositionMonster === initialPostion) {
+                break;
+              } else if (
+                currentPositionMonster + 35 === pacmanPosition ||
+                currentPositionMonster - 35 === pacmanPosition ||
+                currentPositionMonster + 1 === pacmanPosition ||
+                currentPositionMonster - 1 === pacmanPosition
+              ) {
+                arrayOfPaths.push(newArr3);
+              } else {
+                findPath(
+                  initialPostion,
+                  currentPositionMonster + 1,
+                  pacmanPosition,
+                  currentDirection,
+                  newArr1,
+                  arrayOfPaths
+                );
+              }
+              break;
+
+            case i === "West":
+              nextPosition = currentPositionMonster - 1;
+              currentDirection = "West";
+              let newArr2 = initialArray;
+              newArr2.push(nextPosition);
+              if (currentPositionMonster === initialPostion) {
+                break;
+              } else if (
+                currentPositionMonster + 35 === pacmanPosition ||
+                currentPositionMonster - 35 === pacmanPosition ||
+                currentPositionMonster + 1 === pacmanPosition ||
+                currentPositionMonster - 1 === pacmanPosition
+              ) {
+                arrayOfPaths.push(newArr1);
+              } else {
+                findPath(
+                  initialPostion,
+                  currentPositionMonster + 1,
+                  pacmanPosition,
+                  currentDirection,
+                  newArr1,
+                  arrayOfPaths
+                );
+              }
+              break;
+
+            case i === "North":
+              nextPosition = currentPositionMonster - 35;
+              currentDirection = "North";
+              let newArr4 = initialArray;
+              newArr4.push(nextPosition);
+              if (currentPositionMonster === initialPostion) {
+                break;
+              } else if (
+                currentPositionMonster + 35 === pacmanPosition ||
+                currentPositionMonster - 35 === pacmanPosition ||
+                currentPositionMonster + 1 === pacmanPosition ||
+                currentPositionMonster - 1 === pacmanPosition
+              ) {
+                arrayOfPaths.push(newArr4);
+              } else {
+                findPath(
+                  initialPostion,
+                  currentPositionMonster + 1,
+                  pacmanPosition,
+                  currentDirection,
+                  newArr1,
+                  arrayOfPaths
+                );
+              }
+              break;
+
+              break;
+          }
+        }
+
+        return arrayOfPaths;
+      };
+      console.log(playableTiles, "---playableTiles array");
+    </script>
+  </body>
+</html>
