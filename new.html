@@ -1,0 +1,74 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div
+      id="Main"
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        width: 100%;
+        height: 100%;
+      "
+    >
+      <div id="Game" style="position: relative;" >
+        <div id="Superimposed-Div" style="position: absolute;width: 100%; height:100%" >
+            
+        </div>
+        
+      </div>
+    </div>
+    <script>
+      let Game = document.getElementById("Game");
+      let SuperimposedDiv = document.getElementById('Superimposed-Div');
+      Game.style.backgroundColor = "gray";
+      Game.style.display = "flex";
+      Game.style.flexDirection = "column";
+      SuperimposedDiv.style.backgroundColor = "gray";
+      SuperimposedDiv.style.opacity = "0.5";
+      SuperimposedDiv.style.display = "flex";
+      SuperimposedDiv.style.flexDirection = "column";
+      SuperimposedDiv.style.border = "2px solid white";
+
+
+      Game.style.width = "600px";
+      Game.style.height = "600px";
+      //Game.style.border = "yellow 2px solid";
+      for (let i = 0; i < 6; i++) {
+        let newColumn = document.createElement("div");
+        //newColumn.style.border = "yellow 2px solid";
+        newColumn.style.display = "flex";
+        newColumn.style.flexDirection = "row";
+        newColumn.style.flex = "1";
+        newColumn.style.justifyContent = "space-evenly";
+        Game.appendChild(newColumn);
+        for (let j = 0; j < 6; j++) {
+          let Block = document.createElement("div");
+          
+          Block.style.display = "flex";
+          Block.style.flexDirection = "column";
+          Block.style.justifyContent = "center";
+          Block.style.alignItems = "center";
+          Block.style.flex = "1";
+          
+          let dot =  document.createElement("div");
+          Block.appendChild(dot);
+          dot.id = `${6*i+(j+1)}`
+          dot.style.height = "12px";
+          dot.style.width = "12px";
+          dot.style.borderRadius = "100%";
+          dot.style.backgroundColor = "yellow";
+          //Block.style.border = "red 2px solid";
+          newColumn.appendChild(Block);
+        }
+      }
+    </script>
+  </body>
+</html>
