@@ -1,34 +1,6 @@
 //GOOD WORK
 
-
-const checkIfJunction = (currentPositionMonster, currentDirection) => {
-  let allDirections = {
-    East: playableTiles.includes(currentPositionMonster + 1),
-    South: playableTiles.includes(currentPositionMonster + 28),
-    West: playableTiles.includes(currentPositionMonster - 1),
-    North: playableTiles.includes(currentPositionMonster - 28),
-  };
-
-  let movableDirections = [];
-
-  let count_ = 0;
-  Object.keys(allDirections).forEach((key) => {
-    if (
-      allDirections[key] === true &&
-      key !== oppoDirections[currentDirection] //to check that we are not counting the current direction in which monster is headed
-    ) {
-      movableDirections[count_] = key;
-      count_++;
-    }
-  });
-
-  if (movableDirections.length >= 2) {
-    console.log(`The Monster Has Reached a Junction`);
-  }
-
-  return movableDirections;
-};
-
+//these are all the tiles that initially are accesible
 let playableTiles = [
   114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 128, 129, 130,
   131, 132, 133, 134, 135, 136, 137, 138, 139, 142, 147, 153, 156, 162, 167,
@@ -66,91 +38,86 @@ let incrementForDirections = {
   North: -28,
 };
 
+//This function returns the directions to which the pacman can move excluding the one in which currently moving in an Array
+const directionsArray = (currentPositionGhost, currentDirection) => {
+  let allDirections = {
+    East: playableTiles.includes(currentPositionGhost + 1),
+    South: playableTiles.includes(currentPositionGhost + 28),
+    West: playableTiles.includes(currentPositionGhost - 1),
+    North: playableTiles.includes(currentPositionGhost - 28),
+  };
+
+  let movableDirections = [];
+
+  let count_ = 0;
+  Object.keys(allDirections).forEach((key) => {
+    if (
+      allDirections[key] === true &&
+      key !== oppoDirections[currentDirection] //to check that we are not counting the current direction in which Ghost is headed
+    ) {
+      movableDirections[count_] = key;
+      count_++;
+    }
+  });
+
+  return movableDirections;
+};
+
 const findAllPaths = (
-  initialPosition,
-  currentPositionMonster,
+  initialPositionGhost,
+  currentPositionGhost,
   currentDirection,
   pacmanPosition,
-  finalArrayOfPaths,
-  count
+  finalArrayOfPaths
 ) => {
-  console.log( count );
-  if (
-    (count !== 0 && currentPositionMonster === initialPosition) ||
-    currentPositionMonster === pacmanPosition
-  ) {
-    return finalArrayOfPaths;
-  } else {
-    
-    let movableDirections = checkIfJunction( currentPositionMonster, currentDirection);
+  let movablePositions = directionsArray(
+    currentPositionGhost,
+    currentDirection
+  );
 
-    for (const i of movableDirections) {
-      if (
-        finalArrayOfPaths.length === 0 &&
-        currentPositionMonster === initialPosition &&
-        count === 0
-      ) {
-        let array = [];
-  
-        let nextPositionMonster =
-          i === currentDirection
-            ? currentPositionMonster + incrementForDirections[currentDirection]
-            : i === oppoDirections[currentDirection]
-            ? currentPositionMonster + incrementForDirections[currentDirection]
-            : currentPositionMonster + incrementForDirections[i];
+ 
 
 
-        array.push(currentPositionMonster);
-        array.push(nextPositionMonster);
-        finalArrayOfPaths.push(array);
-        
-        count = count + 1;
-        findAllPaths(
-          initialPosition,
-          nextPositionMonster,
-          i,
-          pacmanPosition,
-          finalArrayOfPaths
-        );
-
-      } else {
-
-        for (const j of finalArrayOfPaths) {
-
-          let lastIndex = j.length - 1;
-
-          if (j[lastIndex] === currentPositionMonster) {
-            let nextPositionMonster =
-              i === currentDirection
-                ? currentPositionMonster +
-                  incrementForDirections[currentDirection]
-                : (i === oppoDirections[currentDirection]
-                ? currentPositionMonster +
-                  incrementForDirections[currentDirection]
-                : currentPositionMonster + incrementForDirections[i]);
-
-            if (currentDirection === i) {
-              j.push(nextPositionMonster);
-            } else {
-              let newArr = j;
-              newArr.push(nextPositionMonster);
-              finalArrayOfPaths.push(newArr);
-            }
-            count = count + 1;
-            findAllPaths(
-              initialPosition,
-              nextPositionMonster,
-              i,
-              pacmanPosition,
-              finalArrayOfPaths,
-              count
-            );
-          }
-        }
-      }
-    }
+  if (movablePositions.length === 0) {
+    console.log(finalArrayOfPaths , "dead end reached \n")
+    return;
   }
+
+  movablePositions.forEach((direction) => {
+    if (
+      finalArrayOfPaths.length !== 0 &&
+      currentPositionGhost !== initialPositionGhost &&
+      currentPositionGhost !== pacmanPosition
+    ) {
+      let arr = finalArrayOfPaths[finalArrayOfPaths.length - 1];
+      arr = [ ...arr , currentPositionGhost + incrementForDirections[direction] ];
+      finalArrayOfPaths[finalArrayOfPaths.length - 1] = arr;
+
+      findAllPaths(
+        initialPositionGhost,
+        currentPositionGhost + incrementForDirections[direction],
+        direction,
+        pacmanPosition,
+        finalArrayOfPaths
+      );
+
+    } else if (finalArrayOfPaths.length === 0) {
+      let arr = [];
+      arr.push(currentPositionGhost + incrementForDirections[direction]);
+      finalArrayOfPaths.push(arr);
+      findAllPaths(
+        initialPositionGhost,
+        currentPositionGhost + incrementForDirections[direction],
+        direction,
+        pacmanPosition,
+        finalArrayOfPaths
+      );
+    } else if ( currentPositionGhost === pacmanPosition ) {
+      return;
+    }
+  });
+
+  
 };
 
 console.log(findAllPaths(119, 119, "East", 311, [], 0));
-
