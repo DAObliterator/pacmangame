@@ -38,7 +38,9 @@ let incrementForDirections = {
   North: -28,
 };
 
-//This function returns the directions to which the pacman can move excluding the one in which currently moving in an Array
+let junctions = [];
+
+//This function returns the directions to which the pacman can move excluding the one in which it is currently moving, in an Array
 const directionsArray = (currentPositionGhost, currentDirection) => {
   let allDirections = {
     East: playableTiles.includes(currentPositionGhost + 1),
@@ -63,7 +65,7 @@ const directionsArray = (currentPositionGhost, currentDirection) => {
   return movableDirections;
 };
 
-const findAllPaths = (
+/*const findAllPaths = (
   initialPositionGhost,
   currentPositionGhost,
   currentDirection,
@@ -75,22 +77,27 @@ const findAllPaths = (
     currentDirection
   );
 
- 
-
+  console.log(finalArrayOfPaths, " : 0");
 
   if (movablePositions.length === 0) {
-    console.log(finalArrayOfPaths , "dead end reached \n")
+    console.log(finalArrayOfPaths, "dead end reached \n");
     return;
   }
 
   movablePositions.forEach((direction) => {
+    //if the iterator hasnt reached to a tile that is not where it began from or the tile occupied by Pacman
     if (
       finalArrayOfPaths.length !== 0 &&
       currentPositionGhost !== initialPositionGhost &&
       currentPositionGhost !== pacmanPosition
     ) {
+      let arr1 = finalArrayOfPaths[finalArrayOfPaths.length - 1].slice(
+        0,
+        finalArrayOfPaths.indexOf(currentPositionGhost)
+      );
+
       let arr = finalArrayOfPaths[finalArrayOfPaths.length - 1];
-      arr = [ ...arr , currentPositionGhost + incrementForDirections[direction] ];
+      arr = [...arr, currentPositionGhost + incrementForDirections[direction]];
       finalArrayOfPaths[finalArrayOfPaths.length - 1] = arr;
 
       findAllPaths(
@@ -100,8 +107,10 @@ const findAllPaths = (
         pacmanPosition,
         finalArrayOfPaths
       );
+    }
 
-    } else if (finalArrayOfPaths.length === 0) {
+    //if the iterator has just started not made even a single movement
+    else if (finalArrayOfPaths.length === 0) {
       let arr = [];
       arr.push(currentPositionGhost + incrementForDirections[direction]);
       finalArrayOfPaths.push(arr);
@@ -112,12 +121,56 @@ const findAllPaths = (
         pacmanPosition,
         finalArrayOfPaths
       );
-    } else if ( currentPositionGhost === pacmanPosition ) {
+    }
+
+    //if the pacman is found
+    else if (currentPositionGhost === pacmanPosition) {
       return;
     }
   });
+};*/
 
+//console.log(findAllPaths(119, 119, "East", 311, []));
+
+const findOnePath = (
+  initialPositionGhost,
+  currentPositionGhost,
+  currentDirection,
+  pacmanPosition,
+  onePath
+) => {
+  const movableDirections = directionsArray(
+    currentPositionGhost,
+    currentDirection
+  );
   
+  if (movableDirections.length > 0) {
+    let choosenDirection =
+      movableDirections[Math.floor(Math.random() * movableDirections.length)];
+
+    onePath.push(
+      currentPositionGhost + incrementForDirections[choosenDirection]
+    );
+
+    if (
+      currentPositionGhost + incrementForDirections[choosenDirection] ===
+      pacmanPosition
+    ) {
+      return onePath;
+    } else {
+      findOnePath(
+        initialPositionGhost,
+        currentPositionGhost + incrementForDirections[choosenDirection],
+        pacmanPosition,
+        choosenDirection,
+        onePath
+      );
+    }
+  } else {
+    //if there is no tile to which we can move 
+    return onePath;
+  }
+ 
 };
 
-console.log(findAllPaths(119, 119, "East", 311, [], 0));
+console.log(findOnePath(119, 119, "East", 311, []));
