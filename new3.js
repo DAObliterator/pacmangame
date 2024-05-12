@@ -1,6 +1,5 @@
 
 
-
 let playableTiles_ = [
   114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 128, 129, 130,
   131, 132, 133, 134, 135, 136, 137, 138, 139, 142, 147, 153, 156, 162, 167,
@@ -24,16 +23,21 @@ let playableTiles_ = [
   909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923,
 ];
 
+
+document.getElementById("311").style.backgroundColor = "green";
+
+document.getElementById("227").style.backgroundColor = "blue";
+
+
 const findOnePossiblePath = (
   initialPositionMonster,
   currentPositionMonster,
   currentDirection,
   currentPathArray,
   allPossiblePaths,
-  pacmanPosition
+  pacmanPosition,
+  allVisitedTiles 
 ) => {
-
-  console.log(currentPathArray , "--currentPathArray \n")
   
   if (currentPositionMonster === pacmanPosition) {
     //one way to reach the pacman
@@ -42,10 +46,9 @@ const findOnePossiblePath = (
   }
 
   if (currentPositionMonster === initialPositionMonster && currentPathArray.length > 0) {
-    //reinitialize the currentPath to an empty array
-
+    //returns to the start position 
     allPossiblePaths.push(currentPathArray);
-    return allPossiblePaths;
+    
   }
 
   if (
@@ -63,14 +66,11 @@ const findOnePossiblePath = (
            currentDirection,
            currentPathArray,
            allPossiblePaths,
-           pacmanPosition
+           pacmanPosition,
+           
          );
-       } , 1000);
-    } else {
-      console.log(currentPositionMonster + 1 ,"already been here  \n");
-      allPossiblePaths.push(currentPathArray);
-      return allPossiblePaths;
-    }
+       } , 500);
+    } 
       
   }
   if (
@@ -90,14 +90,11 @@ const findOnePossiblePath = (
            currentDirection,
            currentPathArray,
            allPossiblePaths,
-           pacmanPosition
+           pacmanPosition,
+           
          );
-       }, 1000);
-    } else {
-      console.log( currentPositionMonster - 1 , "already been here  \n");
-      allPossiblePaths.push(currentPathArray);
-      return allPossiblePaths;
-    }
+       }, 500);
+    } 
       
   }
 
@@ -118,14 +115,11 @@ const findOnePossiblePath = (
          currentDirection,
          currentPathArray,
          allPossiblePaths,
-         pacmanPosition
+         pacmanPosition,
+         
        );
-     }, 1000);
-    } else {
-      console.log(currentPositionMonster - 28, "already been here  \n");
-      allPossiblePaths.push(currentPathArray);
-      return allPossiblePaths;
-    }
+     }, 500);
+    } 
      
   }
 
@@ -147,16 +141,13 @@ const findOnePossiblePath = (
           currentDirection,
           currentPathArray,
           allPossiblePaths,
-          pacmanPosition
+          pacmanPosition,
+          
         );
-      }, 1000);
+      }, 500);
+      
      
-    } else {
-      console.log(currentPositionMonster + 28, "already been here  \n");
-      allPossiblePaths.push(currentPathArray);
-      return allPossiblePaths;
-    }
-     
+    } 
   }
 
 
@@ -168,8 +159,14 @@ const findOnePossiblePath = (
   ) {
     allPossiblePaths.push(currentPathArray);
     console.log("dead end reached \n");
-    return allPossiblePaths;
+    
   }
 
+  
+
 };
-console.log(findOnePossiblePath(227, 227, "East", [] , [] , 311));
+
+
+
+
+console.log(findOnePossiblePath(227, 227, "East", [] , [] , 311 , []));
